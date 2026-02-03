@@ -1,0 +1,20 @@
+[package]
+name = "mcp-bridge"
+version = "0.1.0"
+edition = "2021"
+description = "A CLI bridge for running MCP servers in isolated Docker containers"
+license = "MIT"
+repository = "https://github.com/yourusername/mcp-bridge"
+
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"] }
+bollard = "0.15"
+clap = { version = "4.0", features = ["derive"] }
+futures-util = "0.3"
+anyhow = "1.0"
+uuid = { version = "1.0", features = ["v4"] }
+atty = "0.2"
+
+[dev-dependencies]
+tempfile = "3.24.0"
