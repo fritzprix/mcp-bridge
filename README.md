@@ -87,5 +87,47 @@ cargo test
 cargo run -- --image alpine -- sh -c "echo clean_exit"
 ```
 
-## 📄 License
-MIT
+## 🤖 Mcp Agent
+
+The project includes a reference MCP Agent implementation in the `agent/` directory, designed to run within the Docker environment managed by the bridge.
+
+### Features
+- **Shell Capability**: Execute commands, manage background processes.
+- **Filesystem Capability**: optimized `search_files` (ripgrep), `directory_tree` (tree), and standard file operations.
+- **Resources**: Observe running processes via `internal://processes/list`.
+
+### Usage
+Build the agent:
+```bash
+cd agent
+npm install
+npm run build
+docker build -t mcp-agent .
+```
+
+Run with `mcp-bridge`:
+```bash
+# Run the agent using the bridge
+cargo run --release -- --image mcp-agent --mount $(pwd):/workspace
+```
+
+
+## � Client Configuration
+
+To use this with [Claude Desktop](https://modelcontextprotocol.io/quickstart#install-claude-for-desktop) or other MCP clients, add the following to your config file (e.g., `claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "docker-agent": {
+      "command": "/path/to/mcp-bridge",
+      "args": [
+        "--image", "mcp-agent",
+        "--mount", "/absolute/path/to/your/project:/workspace"
+      ]
+    }
+  }
+}
+```
+
+> **Note**: Replace `/path/to/mcp-bridge` with the absolute path to your compiled binary (or `cargo` wrapper) and `/absolute/path/to/your/project` with the directory you want the agent to access.
