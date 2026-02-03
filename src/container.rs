@@ -1,9 +1,10 @@
-use bollard::container::{Config, CreateContainerOptions, RemoveContainerOptions, StartContainerOptions, AttachContainerOptions, AttachContainerResults};
+use bollard::container::{Config, CreateContainerOptions, RemoveContainerOptions, AttachContainerOptions, AttachContainerResults};
 use bollard::Docker;
 use bollard::models::HostConfig;
 use uuid::Uuid;
 use anyhow::{Result, Context};
-use std::sync::Arc;
+
+
 use tokio::io::{AsyncReadExt, AsyncWriteExt, stdin, stdout, stderr};
 
 pub struct ContainerManager {
@@ -128,7 +129,7 @@ impl ContainerManager {
             use futures_util::StreamExt;
             // wait_container returns a stream of WaitContainerResults
             // We just wait for one or for stream end.
-            if let Some(_) = wait_stream.next().await {}
+            if wait_stream.next().await.is_some() {}
         });
 
         tokio::select! {
