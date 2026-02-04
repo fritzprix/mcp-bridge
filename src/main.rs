@@ -11,7 +11,7 @@ use tokio::signal;
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Docker image to use
-    #[arg(long, default_value = "mcp-server:latest")]
+    #[arg(long, default_value = "ghcr.io/fritzprix/mcp-agent:latest")]
     image: String,
 
     /// Environment variables (e.g. KEY=VALUE)
@@ -88,7 +88,7 @@ mod tests {
             "ls"
         ]).unwrap();
 
-        assert_eq!(args.image, "mcp-server:latest");
+        assert_eq!(args.image, "ghcr.io/fritzprix/mcp-agent:latest");
         assert_eq!(args.command, vec!["ls"]);
     }
 

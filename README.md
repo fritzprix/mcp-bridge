@@ -36,15 +36,21 @@ mcp-bridge [OPTIONS] [COMMAND]...
 
 ### Options
 
-*   `--image <IMAGE>`: Docker image to use (default: `mcp-server:latest`).
+*   `--image <IMAGE>`: Docker image to use (default: `ghcr.io/fritzprix/mcp-agent:latest`).
 *   `-v, --mount <SRC:DST>`: Mount a host directory to a container path. Can be used multiple times. Relative host paths are automatically resolved to absolute paths.
 *   `-e, --env <KEY=VALUE>`: Set environment variables. Can be used multiple times.
 *   `[COMMAND]...`: The command to run inside the container (e.g., `node build/index.js`, `python server.py`).
 
 ### Examples
 
-#### Basic Usage
-Run an MCP server from `alpine` image:
+#### Quick Start (Using Pre-built Image)
+```bash
+# Mount current directory and run the agent
+mcp-bridge --mount $(pwd):/workspace
+```
+
+#### Basic Usage with Custom Image
+Run an MCP server from any Docker image:
 ```bash
 mcp-bridge --image alpine -- sh -c "echo 'Starting MCP Server...'"
 ```
@@ -60,8 +66,7 @@ mcp-bridge --image my-mcp-server \
 #### Injecting Environment Variables
 Pass API keys or config:
 ```bash
-mcp-bridge --image my-mcp-server \
-  --env API_KEY=secret123 \
+mcp-bridge --env API_KEY=secret123 \
   --env DEBUG=true \
   -- python main.py
 ```
@@ -97,18 +102,21 @@ The project includes a reference MCP Agent implementation in the `agent/` direct
 - **Resources**: Observe running processes via `internal://processes/list`.
 
 ### Usage
-Build the agent:
+
+**Quick Start (Pre-built Image):**
+```bash
+# Use the pre-built image from GitHub Container Registry
+mcp-bridge --mount $(pwd):/workspace
+```
+
+**Or build locally:**
 ```bash
 cd agent
 npm install
 npm run build
 docker build -t mcp-agent .
-```
-
-Run with `mcp-bridge`:
-```bash
-# Run the agent using the bridge
-cargo run --release -- --image mcp-agent --mount $(pwd):/workspace
+# Run with local image
+mcp-bridge --image mcp-agent --mount $(pwd):/workspace
 ```
 
 
@@ -122,7 +130,6 @@ To use this with [Claude Desktop](https://modelcontextprotocol.io/quickstart#ins
     "docker-agent": {
       "command": "/path/to/mcp-bridge",
       "args": [
-        "--image", "mcp-agent",
         "--mount", "/absolute/path/to/your/project:/workspace"
       ]
     }
@@ -130,4 +137,4 @@ To use this with [Claude Desktop](https://modelcontextprotocol.io/quickstart#ins
 }
 ```
 
-> **Note**: Replace `/path/to/mcp-bridge` with the absolute path to your compiled binary (or `cargo` wrapper) and `/absolute/path/to/your/project` with the directory you want the agent to access.
+> **Note**: Replace `/path/to/mcp-bridge` with the absolute path to your compiled binary and `/absolute/path/to/your/project` with the directory you want the agent to access. The default image (`ghcr.io/fritzprix/mcp-agent:latest`) will be pulled automatically.
