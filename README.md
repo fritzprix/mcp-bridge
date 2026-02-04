@@ -13,14 +13,31 @@ A robust **Model Context Protocol (MCP) Bridge** written in Rust. This CLI tool 
 
 ## 📦 Installation
 
-### Download Binary
-Download the latest release for your platform from the [Releases](https://github.com/yourusername/mcp-bridge/releases) page.
+### Quick Install (Recommended)
+One-line installation script that downloads the latest release for your platform:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fritzprix/mcp-bridge/master/install.sh | bash
+```
+
+This will:
+- Auto-detect your OS and architecture (Linux/macOS/Windows, x86_64/aarch64)
+- Download the latest binary from GitHub releases
+- Install to `~/.local/bin` (customizable with `INSTALL_DIR`)
+- Verify Docker availability
+
+### Manual Download
+Download the latest release for your platform from the [Releases](https://github.com/fritzprix/mcp-bridge/releases) page:
+- Linux: `mcp-bridge-x86_64-unknown-linux-gnu`
+- macOS (Intel): `mcp-bridge-x86_64-apple-darwin`
+- macOS (Apple Silicon): `mcp-bridge-aarch64-apple-darwin`
+- Windows: `mcp-bridge-x86_64-pc-windows-msvc.exe`
 
 ### Build from Source
 Ensure you have [Rust](https://rustup.rs/) and [Docker](https://docs.docker.com/get-docker/) installed.
 
 ```bash
-git clone https://github.com/yourusername/mcp-bridge.git
+git clone https://github.com/fritzprix/mcp-bridge.git
 cd mcp-bridge
 cargo build --release
 # Binary will be at ./target/release/mcp-bridge
@@ -40,6 +57,24 @@ mcp-bridge [OPTIONS] [COMMAND]...
 *   `-v, --mount <SRC:DST>`: Mount a host directory to a container path. Can be used multiple times. Relative host paths are automatically resolved to absolute paths.
 *   `-e, --env <KEY=VALUE>`: Set environment variables. Can be used multiple times.
 *   `[COMMAND]...`: The command to run inside the container (e.g., `node build/index.js`, `python server.py`).
+
+### Convenience Wrapper (Optional)
+For simplified usage, you can use the provided wrapper script:
+
+```bash
+# Download the wrapper
+curl -fsSL https://raw.githubusercontent.com/fritzprix/mcp-bridge/master/mcp-bridge.sh -o mcp-bridge.sh
+chmod +x mcp-bridge.sh
+
+# Run with defaults (mounts current directory)
+./mcp-bridge.sh run
+
+# Open interactive shell
+./mcp-bridge.sh shell
+
+# Use custom image
+./mcp-bridge.sh custom alpine -- sh -c "echo hello"
+```
 
 ### Examples
 
